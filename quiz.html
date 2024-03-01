@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz App</title>
+</head>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        
+        .container {
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 0 20px;
+        }
+        
+        h1 {
+            text-align: center;
+        }
+        
+        #questionContainer {
+            margin-bottom: 20px;
+        }
+        
+        .question {
+            margin-bottom: 10px;
+        }
+        
+        #submitBtn {
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        
+        #submitBtn:hover {
+            background-color: #0056b3;
+        }
+        
+        #scoreContainer {
+            display: none;
+            margin-top: 20px;
+        }
+        
+    </style>
+<body>
+    <div class="container">
+        <h1>Quiz App</h1>
+        <div id="questionContainer"></div>
+        <button id="submitBtn">Submit</button>
+        <div id="scoreContainer"></div>
+    </div>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const questions = [
+                {
+                    question: "What is the capital of France?",
+                    options: ["Paris", "London", "Berlin", "Rome"],
+                    answer: "Paris"
+                },
+                {
+                    question: "Who wrote 'To Kill a Mockingbird'?",
+                    options: ["Harper Lee", "J.K. Rowling", "Stephen King", "Charles Dickens"],
+                    answer: "Harper Lee"
+                },
+                {
+                    question: "What is the chemical symbol for water?",
+                    options: ["H2O", "CO2", "NaCl", "O2"],
+                    answer: "H2O"
+                }
+            ];
+        
+            const questionContainer = document.getElementById("questionContainer");
+            const submitBtn = document.getElementById("submitBtn");
+            const scoreContainer = document.getElementById("scoreContainer");
+        
+            let score = 0;
+        
+            function displayQuestions() {
+                questions.forEach((questionObj, index) => {
+                    const questionDiv = document.createElement("div");
+                    questionDiv.classList.add("question");
+                    const questionText = document.createElement("p");
+                    questionText.textContent = `${index + 1}. ${questionObj.question}`;
+                    questionDiv.appendChild(questionText);
+                    questionObj.options.forEach(option => {
+                        const optionInput = document.createElement("input");
+                        optionInput.setAttribute("type", "radio");
+                        optionInput.setAttribute("name", `question${index}`);
+                        optionInput.setAttribute("value", option);
+                        questionDiv.appendChild(optionInput);
+                        const optionLabel = document.createElement("label");
+                        optionLabel.textContent = option;
+                        questionDiv.appendChild(optionLabel);
+                        const lineBreak = document.createElement("br");
+                        questionDiv.appendChild(lineBreak);
+                    });
+                    questionContainer.appendChild(questionDiv);
+                });
+            }
+        
+            function calculateScore() {
+                score = 0;
+                questions.forEach((questionObj, index) => {
+                    const selectedOption = document.querySelector(`input[name="question${index}"]:checked`);
+                    if (selectedOption && selectedOption.value === questionObj.answer) {
+                        score++;
+                    }
+                });
+            }
+        
+            submitBtn.addEventListener("click", function() {
+                calculateScore();
+                questionContainer.style.display = "none";
+                submitBtn.style.display = "none";
+                scoreContainer.textContent = `Your score: ${score} out of ${questions.length}`;
+                scoreContainer.style.display = "block";
+            });
+        
+            displayQuestions();
+        });
+        
+    </script>
+</body>
+</html>
